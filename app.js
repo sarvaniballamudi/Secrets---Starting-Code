@@ -2,7 +2,8 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const ejs = require("ejs");
-const md5 = require("md5");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 require("dotenv").config();
 
 const app = express();
@@ -38,12 +39,18 @@ app.post("/login", (req, res) => {
             console.log(error);
         } else {
             if(resultUser){
-                if(resultUser.password === md5(req.body.password)) {
-                    res.render("secrets");
-                }
+                bcrypt.compare(req.body.password, resultUser.password, (error, result) => {
+                    if(error) {
+                        console.log(error);
+                    } else {
+                        if(result) {
+                            res.render("secrets");
+                        }
+                    }
+                });
             }
         }
-    })
+    });
 });
 
 app.get("/register", (req,res) => {
@@ -52,18 +59,24 @@ app.get("/register", (req,res) => {
 
 app.post("/register", (req, res) => {
 
-    const newUser = new User({
-        username: req.body.username,
-        password: md5(req.body.password)
-    });
-
-    newUser.save((error) => {
+    bcrypt.hash(req.body.password, saltRounds, (error, hash) => {
         if(error) {
             console.log(error);
         } else {
-            res.render("secrets");
+            const newUser = new User({
+                username: req.body.username,
+                password: hash
+            })
+
+            newUser.save((error) => {
+                if(error) {
+                    console.log(error);
+                } else {
+                    res.render("secrets");
+                }
+            })
         }
-    });
+    })
 });
 
 app.listen(3000, () => {

@@ -5,4 +5,6 @@ The tech stack used for this project is - MongoDB , NodeJS and Express.
 
 Different Levels of Authentication are developed and tested on this app.
 - Authentication with Basic Username and Password
-- Authentication with Password Encryption
+- Authentication with Password Encryption (mongoose-encryption)
+- Authentication with Hashing Algorithm (md5)
+- Authentication with Hashing and Salting (bcrypt)
