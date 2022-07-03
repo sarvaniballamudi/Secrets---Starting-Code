@@ -8,3 +8,4 @@ Different Levels of Authentication are developed and tested on this app.
 - Authentication with Password Encryption (mongoose-encryption)
 - Authentication with Hashing Algorithm (md5)
 - Authentication with Hashing and Salting (bcrypt)
+- Authentication with Passport.js
